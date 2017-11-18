@@ -1,8 +1,13 @@
 import { Mongo } from "meteor/mongo";
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from "meteor/mdg:validated-method";
+import { Average, AveragesSchema } from "/imports/api/average.js";
 
-export const MonthlyAverages = new Mongo.Collection("monthlyaverages");
+export const MonthlyAverages = new Mongo.Collection("monthlyaverages", {
+    transform(doc) {
+        return new Average(doc);
+    }
+});
 
 export const removeMonthlyAverage = new ValidatedMethod({
     name: "removeMonthlyAverage",
@@ -14,32 +19,10 @@ export const removeMonthlyAverage = new ValidatedMethod({
     }
 });
 
+MonthlyAverages.attachSchema(AveragesSchema);
 MonthlyAverages.attachSchema(new SimpleSchema({
     fkYearly: {
         type: String,
         optional: true
-    },
-
-    temperature: {
-        type: Number
-    },
-
-    barometer: {
-        type: Number
-    },
-
-    luxometer: {
-        type: Number
-    },
-
-    dateCreated: {
-        type: Date,
-        autoValue: function () {
-            if (this.isInsert) {
-                return new Date();
-            } else {
-                this.unset();
-            }
-        }
     }
 }));

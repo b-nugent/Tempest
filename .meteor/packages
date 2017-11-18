@@ -25,3 +25,5 @@ aldeed:simple-schema
 mdg:validated-method
 percolate:synced-cron
 underscore
+pfafman:filesaver
+udondan:jszip
